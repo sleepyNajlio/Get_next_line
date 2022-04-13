@@ -6,7 +6,7 @@
 /*   By: nloutfi <nloutfi@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/06 04:28:28 by nloutfi           #+#    #+#             */
-/*   Updated: 2022/01/06 06:41:00 by nloutfi          ###   ########.fr       */
+/*   Updated: 2022/04/10 00:00:20 by nloutfi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,8 @@ int		ft_strchr(const char *s, int c);
 char	*ft_strjoin(char const *s, char const *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *src);
+void check_leaks();
+
 
 #endif

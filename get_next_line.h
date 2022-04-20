@@ -24,7 +24,7 @@ char	*ft_strjoin(char const *s, char const *s1);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *s);
 char	*ft_strdup(const char *src);
-void check_leaks();
-
+char	*ft_join_n(char *s1, char *s2, int n);
+void	ft_free(char *s);
 
 #endif

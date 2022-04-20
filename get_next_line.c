@@ -11,33 +11,38 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	ft_free(char *str)
-{
-	if (str)
-		free(str);
-	str = NULL;
-}
+#include <strings.h>
 
 void	ft_extraction(char **line, char **stock)
 {
-	int i;
-	char *temp;
+	int		i;
+	char	*temp;
 
 	i = ft_strchr(*stock, '\n') + 1;
-	*line = ft_substr(*stock, 0, i);
+	*line = ft_join_n(0, *stock, i);
 	temp = *stock;
-	*stock = ft_strdup(&(*stock)[i]);
+	*stock = ft_join_n(0, &temp[i], ft_strlen(&temp[i]));
 	ft_free(temp);
 }
 
-
+char	*read_fail(char **stock, char **buff, char **line)
+{
+	if (*stock && (*stock)[0] == '\0')
+	{
+		ft_free(*buff);
+		ft_free(*stock);
+		return (0);
+	}
+	ft_free(*buff);
+	*line = ft_join_n(*stock, 0, 0);
+	*stock = NULL;
+	return (*line);
+}
 
 char	*get_next_line(int fd)
 {
 	char		*buff;
 	static char	*stock;
-	char		*temp;
 	int			rd;
 	char		*line;
 
@@ -47,52 +52,31 @@ char	*get_next_line(int fd)
 	while (ft_strchr(stock, '\n') == -1)
 	{
 		rd = read(fd, buff, BUFFER_SIZE);
-		// if (rd == -1 || rd == 0)
-		// {
-		// 	if (stock && stock[0] == '\0')
-		// 		return (ft_free(stock));
-		// 	temp = stock;
-		// 	stock = NULL;
-		// 	return (temp);
-		// }
-		if (rd == -1)
-		{
-			ft_free(stock);
-			ft_free(buff);
-			return (NULL);
-		}
-		if (rd == 0)
-		{
-			if (stock && stock[0] == '\0')
-				ft_free(stock);
-			temp = stock;
-			stock = NULL;
-			ft_free(buff);
-			return (temp);
-		}
-		
+		if (rd < 1)
+			return (read_fail(&stock, &buff, &line));
 		buff[rd] = '\0';
-		temp = stock;
-		stock = ft_strjoin(stock, buff);
-		ft_free(temp);
+		stock = ft_join_n(stock, buff, rd);
 	}
 	ft_free(buff);
 	ft_extraction(&line, &stock);
 	return (line);
 }
 
-int main()
-{
-	int fd;
-	int i = 0;
-	
-	fd = open("najlio.txt", O_RDONLY);
-	//s = get_next_line(fd);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
+// int main()
+// {
+// 	int fd;
+// 	int i = 0;
 
-	//system("leaks a.out");
-	check_leaks();
-}
+// 	fd = 1;
+// 	char *s ;
+// 	while (fd < 2) 
+// 	{
+// 		s = get_next_line(fd);
+// 		printf("--------\n");
+// 		printf("%s\n", s);
+// 		printf("---------\n");
+// 		ft_free(s);
+// 		i++;
+// 	}
+// 	//system("leaks a.out");
+// }
